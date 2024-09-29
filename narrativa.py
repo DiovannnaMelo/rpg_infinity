@@ -53,13 +53,27 @@ class Game:
         print("O narrador se aproxima e diz:")
         print('"Vocês estão prestes a embarcar em uma aventura épica transtemporal que utiliza uma magia nova chamada "tecnologia".')
         print("O objetivo desta jornada é responder enigmas e enfrentar um chefão final.")
-        print("Em troca, vocês ganharão novas habilidades ao longo do tempo.')
+        print("Em troca, vocês ganharão novas habilidades ao longo do tempo.")
         print("Vocês desejam embarcar nessa aventura? (Sim)")
 
         choice = input("Digite 'Sim' para continuar: ").strip().lower()
         if choice != "sim":
             print("O narrador sorri e diz: 'Infelizmente, essa aventura não espera por ninguém. Até a próxima!'")
             exit()
+
+    def show_regions(self):
+        print("\nRegiões disponíveis:")
+        for region in self.regions:
+            print(region)
+
+    def show_characters(self):
+        print("\nPersonagens disponíveis:")
+        for character in self.characters:
+            print(character)
+
+    def show_conflict(self):
+        print("\nConflito atual:")
+        print(self.conflict)
 
     def teleport_to_trade_center(self):
         print("\nAssim que vocês aceitam a aventura, uma luz intensa os envolve.")
@@ -165,23 +179,5 @@ class Game:
             "O que é um objeto em POO?": ("(1) Um loop de repetição.", "(2) Instância de uma classe.", "2"),
             "O que é herança em POO?": ("(1) Compartilhamento de atributos e métodos entre classes.", "(2) Atributos privados de uma classe.", "1"),
             "O que é encapsulamento em POO?": ("(1) Restrição do acesso direto a atributos.", "(2) Criação de uma nova classe.", "1"),
-            "O que é polimorfismo em POO?": ("(1) Permitir que várias classes usem métodos com o mesmo nome.", "(2) Permitir que uma função tenha vários loops.", "1"),
-        }
-
-        for question, (option1, option2, correct_answer) in questions.items():
-            print(f'\n{question}')
-            print(option1)
-            print(option2)
-
-            choice = input("Digite '1' ou '2': ").strip()
-
-            if choice == correct_answer:
-                print("Correto! Você demonstrou seu conhecimento em POO.")
-            else:
-                print("Errado! O chefão fica desapontado com sua resposta.")
-
-        print("Parabéns, você completou o desafio!")
-
-# Para iniciar o jogo
-game = Game()
-game.start()
+            "O que é polimorfismo em POO?": ("(1) Permitir que várias classes usem métodos com o mesmo nome.", "(2) Permitir que uma função tenha vários loops")
+            }
