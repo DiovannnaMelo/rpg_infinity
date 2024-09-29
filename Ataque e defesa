@@ -1,0 +1,109 @@
+import random
+
+class Character:
+    def __init__(self, name, health, attack, defense):
+        self.name = name
+        self.health = health
+        self.attack = attack
+        self.defense = defense
+
+    def is_alive(self):
+        return self.health > 0
+
+    def attack_opponent(self, opponent, dice_roll, extra_points):
+        damage = self.attack + dice_roll + extra_points - opponent.defense
+        damage = max(damage, 0)  # Evita dano negativo
+        opponent.health -= damage
+        print(f"{self.name} atacou {opponent.name} e causou {damage} de dano.")
+
+class Villain:
+    def __init__(self, name, health, defense):
+        self.name = name
+        self.health = health
+        self.defense = defense
+
+    def is_alive(self):
+        return self.health > 0
+
+    def attack(self):
+        return random.randint(5, 15)  # Dano aleatório do vilão
+
+    def ask_question(self):
+        questions = {
+            "O que é uma classe em POO?": ("(a) Molde ou modelo para criar objetos.", "(b) Função que executa um código automaticamente.", "a"),
+            "O que é um objeto em POO?": ("(a) Um loop de repetição.", "(b) Instância de uma classe.", "b"),
+            "O que é herança em POO?": ("(a) Compartilhamento de atributos e métodos entre classes.", "(b) Atributos privados de uma classe.", "a"),
+            "O que é encapsulamento em POO?": ("(a) Restrição do acesso direto a atributos.", "(b) Criação de uma nova classe.", "a"),
+            "O que é polimorfismo em POO?": ("(a) Permitir que várias classes usem métodos com o mesmo nome.", "(b) Permitir que uma função tenha vários loops.", "a")
+        }
+        question, (option1, option2, correct_answer) = random.choice(list(questions.items()))
+        print(f"{self.name} pergunta: {question}")
+        print(f"{option1}\n{option2}")
+        return input("Escolha (a/b): ").strip().lower(), correct_answer
+
+def roll_dice(sides):
+    return random.randint(1, sides)
+
+def battle(player, villain):
+    turn = 0
+    while player.is_alive() and villain.is_alive():
+        print(f"\n--- Turno {turn + 1} ---")
+        
+        # Jogador ataca
+        action = input(f"{player.name}, você quer atacar? (s/n): ").strip().lower()
+        while action not in ['s', 'n']:
+            print("Entrada inválida! Por favor, escolha 's' para sim ou 'n' para não.")
+            action = input(f"{player.name}, você quer atacar? (s/n): ").strip().lower()
+
+        if action == 's':
+            dice_roll = roll_dice(20)  # Dado de 20 faces
+            print(f"Você rolou um {dice_roll} (1d20)!")
+            # Vilão faz pergunta de múltipla escolha sobre POO
+            player_answer, correct_answer = villain.ask_question()
+
+            extra_points = 0
+            if player_answer == correct_answer:
+                print("Resposta correta! Você ganha 5 pontos extras.")
+                extra_points = 5
+            else:
+                print(f"Resposta errada! A resposta correta era: {correct_answer}.")
+
+            player.attack_opponent(villain, dice_roll, extra_points)
+        else:
+            print(f"{player.name} escolheu não atacar.")
+
+        print(f"{villain.name} tem {villain.health} de vida restante.")
+
+        if villain.is_alive():
+            # Vilão ataca
+            villain_damage = villain.attack() - player.defense
+            villain_damage = max(villain_damage, 0)  # Evita dano negativo
+            player.health -= villain_damage
+            print(f"{villain.name} atacou {player.name} e causou {villain_damage} de dano.")
+            print(f"{player.name} tem {player.health} de vida restante.")
+
+        turn += 1
+
+    if player.is_alive():
+        print(f"\n{player.name} venceu a batalha!")
+    else:
+        print(f"\n{villain.name} venceu a batalha!")
+
+# Criação do personagem do jogador
+name = input("Digite o nome do seu personagem: ")
+health = 30
+
+print("\nAgora vamos rolar os dados para definir seu ataque e defesa!")
+attack = roll_dice(20)  # Jogador rola um dado de 20 lados para ataque
+print(f"Seu ataque é {attack} (rolando 1d20).")
+
+defense = roll_dice(20)  # Jogador rola um dado de 20 lados para defesa
+print(f"Sua defesa é {defense} (rolando 1d20).")
+
+player = Character(name, health, attack, defense)
+
+# Criação do vilão
+villain = Villain("Vilão Mateus Alves do POO", health=30, defense=random.randint(1, 5))
+
+# Início da batalha
+battle(player, villain)
